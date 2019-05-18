@@ -1,0 +1,103 @@
+# This is the python file used to download and generate dataset using the Youtube API
+
+
+import csv
+import os
+import time
+import json
+from googleapiclient.discovery import build
+import pandas as pd
+
+api_key = "AIzaSyB6oEFCmMe4dJpIyOliDIpqqBiZmhEDurg"
+youtube  = build('youtube','v3',developerKey=api_key)
+
+
+os.chdir('C:\\Users\\prate\\Desktop\\youtubeData')
+#def youtube_search():
+youtube = build('youtube','v3',developerKey=api_key)
+token = None
+title = []
+channelId = []
+channelTitle = []
+categoryId = []
+videoId = []
+viewCount = []
+likeCount = []
+dislikeCount = []
+commentCount = []
+favoriteCount = []
+category = []
+tags = []
+duration = []
+videos = []
+publishedAt = []
+description = []
+country_data = []
+country = 'DE'
+for k in range(10):
+    #search_response = youtube.search().list(q=q,type="video",part="id,snippet,statistics,contentDetails", maxResults=10).execute()
+    search_response = youtube.videos().list(pageToken = token,part='id,snippet,statistics,contentDetails', chart="mostPopular",regionCode=country, maxResults=10).execute()
+    #search_response['nextPageToken']
+
+    i = 0
+#    search_response['items'][46]['statistics']['commentCount']
+    for i in range(10):
+    #for search_response in search_r:
+        print(i)
+        #i = i + 1
+        if 'publishedAt' in search_response['items'][i]['snippet'].keys():
+            publishedAt.append(search_response['items'][i]['snippet']['publishedAt'])
+        else:
+            break
+
+        channelId.append(search_response['items'][i]['snippet']['channelId'])
+        title.append(search_response['items'][i]['snippet']['title'])
+        description.append(search_response['items'][i]['snippet']['description'])
+
+        duration.append(search_response['items'][i]['contentDetails']['duration'])
+        if 'viewCount' in search_response['items'][i]['statistics'].keys():
+            viewCount.append(search_response['items'][i]['statistics']['viewCount'])
+        else:
+            viewCount.append(0)
+
+        if 'likeCount' in search_response['items'][i]['statistics'].keys():
+            likeCount.append(search_response['items'][i]['statistics']['likeCount'])
+        else:
+            likeCount.append(0)
+
+        if 'dislikeCount' in search_response['items'][i]['statistics'].keys():
+            dislikeCount.append(search_response['items'][i]['statistics']['dislikeCount'])
+        else:
+            dislikeCount.append(0)
+
+        if 'commentCount' in search_response['items'][i]['statistics'].keys():
+            commentCount.append(search_response['items'][i]['statistics']['commentCount'])
+        else:
+            commentCount.append(0)
+        country_data.append(country)
+        #viewCount.append(search_response['items'][i]['statistics']['viewCount'])
+        #likeCount.append(search_response['items'][i]['statistics']['likeCount'])
+        #dislikeCount.append(search_response['items'][i]['statistics']['dislikeCount'])
+        #favoriteCount.append(search_response['items'][0]['statistics']['favouriteCount'])
+        #commentCount.append(search_response['items'][i]['statistics']['commentCount'])
+    if 'nextPageToken' in search_response.keys():
+        token = search_response['nextPageToken']
+    else:
+        break
+    time.sleep(2)
+
+youtube_dict = {'channelId': channelId, 'title': title, 'publish_timing': publishedAt,'views': viewCount,'likeCount': likeCount, 'dislikeCount': dislikeCount,'commentCount': commentCount,'Duration': duration,'Country': country}
+
+    #return youtube_dict
+
+
+
+youtube_dict
+youtube_dict.keys()
+#test = youtube_search()
+#newtest = test
+#n = test.append
+#test.keys()
+#test
+file = pd.DataFrame(youtube_dict)
+file.to_csv('DE_2.csv', encoding='utf-8', index=False)
