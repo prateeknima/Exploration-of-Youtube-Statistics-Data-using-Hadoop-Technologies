@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS youtube (id int,trending_date String,video_title String,channel_title String,views int,likes int,dislike int,comment_count int,video_category String,country String,upload_date String,upload_time String,hour int,month int) ROW FORMAT DELIMITED FIELDS TERMINATED BY '\054';
+LOAD DATA INPATH 'hdfs://localhost:54310/youtubedata/part-m-00000' INTO TABLE youtube;
+CREATE TABLE hiveQuery(id int, channel_title string,ratio float) STORED BY 'org.apache.hadoop.hive.hbase.HBaseStorageHandler' WITH SERDEPROPERTIES ("hbase.columns.mapping" = ":key,cf1:channel_title,cf2:ratio") TBLPROPERTIES ("hbase.table.name" = "hiveQuery");
+INSERT OVERWRITE TABLE hiveQuery Select DISTINCT id,video_title,myratio from (select id,video_title,video_category,country,CAST((likes/dislike)AS float) AS myratio from youtube)t WHERE country="USA" AND video_category="Drama" ORDER BY myratio DESC LIMIT 20;
+
+
