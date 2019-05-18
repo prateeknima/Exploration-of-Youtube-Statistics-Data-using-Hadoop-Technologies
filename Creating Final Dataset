@@ -1,0 +1,39 @@
+#R code to clean and merge the Youtube API dataset and Kaggle datasets to create the final dataset
+
+#install.packages("assertthat")
+#library("assertthat")
+#setwd("C:\\Users\\prate\\Desktop\\youtubeData\\final")
+direc <- "/home/prateek/Desktop/myProject/Datasets/cleaned_datasets"
+setwd(direc)
+
+Data1 <- read.csv("final_api.csv", header=T, na.strings=c(""), stringsAsFactors = T)
+Data2 <- read.csv("MyData1.csv", header=T, na.strings=c(""), stringsAsFactors = T)
+ncol(Data1)
+ncol(Data2)
+dataForInput <- rbind(Data2,Data1)
+dataForInput$channel_title <- gsub(",","-",dataForInput$channel_title)
+dataForInput$title <- gsub(",","-",dataForInput$title)
+#dataForInput$trending_date <- gsub(".","-",dataForInput$trending_date)
+colnames(Data1)
+colnames(Data2)
+colnames(dataForInput)[which(names(dataForInput) == "time")] <- "video_time"
+
+dataForInput$channel_title <- as.character(dataForInput$channel_title)
+dataForInput$trending_date <- as.character(dataForInput$trending_date)
+dataForInput$title <- as.character(dataForInput$title)
+dataForInput$video_category <- as.character(dataForInput$video_category)
+dataForInput$country <- as.character(dataForInput$country)
+dataForInput$likes[dataForInput$likes == "NA"] <- 0
+dataForInput$dislikes[dataForInput$dislikes == "NA"] <- 0
+dataForInput$views[dataForInput$views == "NA"] <- 0
+dataForInput$comment_count[dataForInput$comment_count == "NA"] <- 0
+dataForInput$hour[dataForInput$hour == "NA"] <- 0
+dataForInput$month[dataForInput$month == "NA"] <- 0
+nrow(dataForInput)
+dataForInput$ID <- NULL
+dataForInput$ID <- 1:378743
+dataForInput <- dataForInput[,c(14,1:13)]
+colnames(dataForInput) <- NULL
+direc2 <- "/home/prateek/Desktop/myProject/Datasets/final_data"
+setwd(direc2)
+write.csv(dataForInput, file = "final_dataset.csv", row.names = FALSE)
