@@ -1,0 +1,418 @@
+#R code to clean and merge the datasets downloaded from kaggle
+#install.packages("rjson")
+library('rjson')
+#setwd("C:\\Users\\prate\\Desktop\\youtubeData\\kaggle")
+direc <- "/home/prateek/Desktop/myProject/Datasets/kaggle_data"
+setwd(direc)
+
+INData <- read.csv("INvideos.csv", header=T, na.strings=c(""), stringsAsFactors = T)
+
+#Converting video categories
+IN_category <- fromJSON(file="IN_category_id.json")
+cate <- sapply(IN_category$items, FUN=function(l){
+  id <- l$id
+  category <- l$snippet$title
+  return(c(id,category))
+})
+cate <- data.frame(t(cate))
+colnames(cate) <- c("category_id","video_category")
+cate$category_id <- as.numeric(cate$category_id)
+rownames(cate) <- cate$category_id
+INData$video_category <- cate[INData$category_id,]$video_category
+INData$video_category
+
+
+INData$country <- "India"
+INData[1]
+newData <- INData[-1]
+newData[1]
+my_date <- as.Date(newData$publish_time)
+#my_date
+my_time <- substring(newData$publish_time,12,19)
+#my_time
+newData$date <- as.Date(newData$publish_time)
+newData$time <- substring(newData$publish_time,12,19)
+
+newData$thumbnail_link <- NULL
+newData$video_error_or_removed <- NULL
+newData$ratings_disabled <- NULL
+newData$comments_disabled <- NULL
+newData$publish_time <- NULL
+newData$description <- NULL
+#setwd("C:\\Users\\prate\\Desktop\\youtubeData\\newFinal")
+#write.csv(newData, file = "MyData.csv")
+
+#<--------------------------------------------------------->
+
+#setwd("C:\\Users\\prate\\Desktop\\youtubeData\\kaggle")
+CAData <- read.csv("CAvideos.csv", header=T, na.strings=c(""), stringsAsFactors = T)
+#Converting video categories
+CA_category <- fromJSON(file="CA_category_id.json")
+cate <- sapply(CA_category$items, FUN=function(l){
+  id <- l$id
+  category <- l$snippet$title
+  return(c(id,category))
+})
+cate <- data.frame(t(cate))
+colnames(cate) <- c("category_id","video_category")
+cate$category_id <- as.numeric(cate$category_id)
+rownames(cate) <- cate$category_id
+CAData$video_category <- cate[CAData$category_id,]$video_category
+CAData$video_category
+
+CAData$country <- "Canada"
+CAData[1]
+newData1 <- CAData[-1]
+newData1[1]
+my_date <- as.Date(newData1$publish_time)
+my_date
+my_time <- substring(newData1$publish_time,12,19)
+my_time
+newData1$date <- as.Date(newData1$publish_time)
+newData1$time <- substring(newData1$publish_time,12,19)
+
+newData1$thumbnail_link <- NULL
+newData1$video_error_or_removed <- NULL
+newData1$ratings_disabled <- NULL
+newData1$comments_disabled <- NULL
+newData1$publish_time <- NULL
+newData1$description <- NULL
+#setwd("C:\\Users\\prate\\Desktop\\youtubeData\\newFinal")
+
+#<--------------------------------------------------------->
+
+#setwd("C:\\Users\\prate\\Desktop\\youtubeData\\kaggle")
+DEData <- read.csv("DEvideos.csv", header=T, na.strings=c(""), stringsAsFactors = T)
+
+#Converting video categories
+DE_category <- fromJSON(file="DE_category_id.json")
+cate <- sapply(DE_category$items, FUN=function(l){
+  id <- l$id
+  category <- l$snippet$title
+  return(c(id,category))
+})
+cate <- data.frame(t(cate))
+colnames(cate) <- c("category_id","video_category")
+cate$category_id <- as.numeric(cate$category_id)
+rownames(cate) <- cate$category_id
+DEData$video_category <- cate[DEData$category_id,]$video_category
+#DEData$video_category
+
+
+DEData$country <- "Germany"
+#DEData[1]
+newData2 <- DEData[-1]
+#newData2[1]
+my_date <- as.Date(newData2$publish_time)
+#my_date
+my_time <- substring(newData2$publish_time,12,19)
+#my_time
+newData2$date <- as.Date(newData2$publish_time)
+newData2$time <- substring(newData2$publish_time,12,19)
+
+newData2$thumbnail_link <- NULL
+newData2$video_error_or_removed <- NULL
+newData2$ratings_disabled <- NULL
+newData2$comments_disabled <- NULL
+newData2$publish_time <- NULL
+newData2$description <- NULL
+#setwd("C:\\Users\\prate\\Desktop\\youtubeData\\newFinal")
+
+#<--------------------------------------------------------->
+
+#setwd("C:\\Users\\prate\\Desktop\\youtubeData\\kaggle")
+FRData <- read.csv("FRvideos.csv", header=T, na.strings=c(""), stringsAsFactors = T)
+#Converting video categories
+
+FR_category <- fromJSON(file="FR_category_id.json")
+cate <- sapply(FR_category$items, FUN=function(l){
+  id <- l$id
+  category <- l$snippet$title
+  return(c(id,category))
+})
+cate <- data.frame(t(cate))
+colnames(cate) <- c("category_id","video_category")
+cate$category_id <- as.numeric(cate$category_id)
+rownames(cate) <- cate$category_id
+FRData$video_category <- cate[FRData$category_id,]$video_category
+FRData$video_category
+
+
+FRData$country <- "France"
+FRData[1]
+newData3 <- FRData[-1]
+newData3[1]
+my_date <- as.Date(newData3$publish_time)
+my_date
+my_time <- substring(newData3$publish_time,12,19)
+my_time
+newData3$date <- as.Date(newData3$publish_time)
+newData3$time <- substring(newData3$publish_time,12,19)
+
+newData3$thumbnail_link <- NULL
+newData3$video_error_or_removed <- NULL
+newData3$ratings_disabled <- NULL
+newData3$comments_disabled <- NULL
+newData3$publish_time <- NULL
+newData3$description <- NULL
+#setwd("C:\\Users\\prate\\Desktop\\youtubeData\\newFinal")
+
+#<--------------------------------------------------------->
+
+#setwd("C:\\Users\\prate\\Desktop\\youtubeData\\kaggle")
+GBData <- read.csv("GBvideos.csv", header=T, na.strings=c(""), stringsAsFactors = T)
+
+#Converting video categories
+GB_category <- fromJSON(file="GB_category_id.json")
+cate <- sapply(GB_category$items, FUN=function(l){
+  id <- l$id
+  category <- l$snippet$title
+  return(c(id,category))
+})
+cate <- data.frame(t(cate))
+colnames(cate) <- c("category_id","video_category")
+cate$category_id <- as.numeric(cate$category_id)
+rownames(cate) <- cate$category_id
+GBData$video_category <- cate[GBData$category_id,]$video_category
+GBData$video_category
+
+
+GBData$country <- "Great Britain"
+GBData[1]
+newData4 <- GBData[-1]
+newData4[1]
+my_date <- as.Date(newData4$publish_time)
+my_date
+my_time <- substring(newData4$publish_time,12,19)
+my_time
+newData4$date <- as.Date(newData4$publish_time)
+newData4$time <- substring(newData4$publish_time,12,19)
+
+newData4$thumbnail_link <- NULL
+newData4$video_error_or_removed <- NULL
+newData4$ratings_disabled <- NULL
+newData4$comments_disabled <- NULL
+newData4$publish_time <- NULL
+newData4$description <- NULL
+#setwd("C:\\Users\\prate\\Desktop\\youtubeData\\newFinal")
+
+#<--------------------------------------------------------->
+
+#setwd("C:\\Users\\prate\\Desktop\\youtubeData\\kaggle")
+JPData <- read.csv("JPvideos.csv", header=T, na.strings=c(""), stringsAsFactors = T)
+
+#Converting video categories
+JP_category <- fromJSON(file="JP_category_id.json")
+cate <- sapply(JP_category$items, FUN=function(l){
+  id <- l$id
+  category <- l$snippet$title
+  return(c(id,category))
+})
+cate <- data.frame(t(cate))
+colnames(cate) <- c("category_id","video_category")
+cate$category_id <- as.numeric(cate$category_id)
+rownames(cate) <- cate$category_id
+JPData$video_category <- cate[JPData$category_id,]$video_category
+JPData$video_category
+
+
+JPData$country <- "Japan"
+JPData[1]
+newData5 <- JPData[-1]
+newData5[1]
+my_date <- as.Date(newData5$publish_time)
+my_date
+my_time <- substring(newData5$publish_time,12,19)
+my_time
+newData5$date <- as.Date(newData5$publish_time)
+newData5$time <- substring(newData5$publish_time,12,19)
+
+newData5$thumbnail_link <- NULL
+newData5$video_error_or_removed <- NULL
+newData5$ratings_disabled <- NULL
+newData5$comments_disabled <- NULL
+newData5$publish_time <- NULL
+newData5$description <- NULL
+#setwd("C:\\Users\\prate\\Desktop\\youtubeData\\newFinal")
+
+#<--------------------------------------------------------->
+
+#setwd("C:\\Users\\prate\\Desktop\\youtubeData\\kaggle")
+KRData <- read.csv("KRvideos.csv", header=T, na.strings=c(""), stringsAsFactors = T)
+
+#Converting video categories
+KR_category <- fromJSON(file="KR_category_id.json")
+cate <- sapply(KR_category$items, FUN=function(l){
+  id <- l$id
+  category <- l$snippet$title
+  return(c(id,category))
+})
+cate <- data.frame(t(cate))
+colnames(cate) <- c("category_id","video_category")
+cate$category_id <- as.numeric(cate$category_id)
+rownames(cate) <- cate$category_id
+KRData$video_category <- cate[KRData$category_id,]$video_category
+KRData$video_category
+
+
+KRData$country <- "South Koria"
+KRData[1]
+newData6 <- KRData[-1]
+newData6[1]
+my_date <- as.Date(newData6$publish_time)
+my_date
+my_time <- substring(newData6$publish_time,12,19)
+my_time
+newData6$date <- as.Date(newData6$publish_time)
+newData6$time <- substring(newData6$publish_time,12,19)
+
+newData6$thumbnail_link <- NULL
+newData6$video_error_or_removed <- NULL
+newData6$ratings_disabled <- NULL
+newData6$comments_disabled <- NULL
+newData6$publish_time <- NULL
+newData6$description <- NULL
+#setwd("C:\\Users\\prate\\Desktop\\youtubeData\\newFinal")
+
+
+#<--------------------------------------------------------->
+
+#setwd("C:\\Users\\prate\\Desktop\\youtubeData\\kaggle")
+MXData <- read.csv("MXvideos.csv", header=T, na.strings=c(""), stringsAsFactors = T)
+
+#Converting video categories
+MX_category <- fromJSON(file="MX_category_id.json")
+cate <- sapply(MX_category$items, FUN=function(l){
+  id <- l$id
+  category <- l$snippet$title
+  return(c(id,category))
+})
+cate <- data.frame(t(cate))
+colnames(cate) <- c("category_id","video_category")
+cate$category_id <- as.numeric(cate$category_id)
+rownames(cate) <- cate$category_id
+MXData$video_category <- cate[MXData$category_id,]$video_category
+MXData$video_category
+
+
+MXData$country <- "Mexico"
+MXData[1]
+newData7 <- MXData[-1]
+newData7[1]
+my_date <- as.Date(newData7$publish_time)
+my_date
+my_time <- substring(newData7$publish_time,12,19)
+my_time
+newData7$date <- as.Date(newData7$publish_time)
+newData7$time <- substring(newData7$publish_time,12,19)
+
+newData7$thumbnail_link <- NULL
+newData7$video_error_or_removed <- NULL
+newData7$ratings_disabled <- NULL
+newData7$comments_disabled <- NULL
+newData7$publish_time <- NULL
+newData7$description <- NULL
+#setwd("C:\\Users\\prate\\Desktop\\youtubeData\\newFinal")
+
+#<--------------------------------------------------------->
+
+#setwd("C:\\Users\\prate\\Desktop\\youtubeData\\kaggle")
+RUData <- read.csv("RUvideos.csv", header=T, na.strings=c(""), stringsAsFactors = T)
+
+#Converting video categories
+RU_category <- fromJSON(file="RU_category_id.json")
+cate <- sapply(RU_category$items, FUN=function(l){
+  id <- l$id
+  category <- l$snippet$title
+  return(c(id,category))
+})
+cate <- data.frame(t(cate))
+colnames(cate) <- c("category_id","video_category")
+cate$category_id <- as.numeric(cate$category_id)
+rownames(cate) <- cate$category_id
+RUData$video_category <- cate[RUData$category_id,]$video_category
+RUData$video_category
+
+
+RUData$country <- "Russia"
+RUData[1]
+newData8 <- RUData[-1]
+newData8[1]
+my_date <- as.Date(newData8$publish_time)
+my_date
+my_time <- substring(newData8$publish_time,12,19)
+my_time
+newData8$date <- as.Date(newData8$publish_time)
+newData8$time <- substring(newData8$publish_time,12,19)
+
+newData8$thumbnail_link <- NULL
+newData8$video_error_or_removed <- NULL
+newData8$ratings_disabled <- NULL
+newData8$comments_disabled <- NULL
+newData8$publish_time <- NULL
+newData8$description <- NULL
+#setwd("C:\\Users\\prate\\Desktop\\youtubeData\\newFinal")
+
+
+#<--------------------------------------------------------->
+
+#setwd("C:\\Users\\prate\\Desktop\\youtubeData\\kaggle")
+USData <- read.csv("USvideos.csv", header=T, na.strings=c(""), stringsAsFactors = T)
+
+#Converting video categories
+US_category <- fromJSON(file="US_category_id.json")
+cate <- sapply(US_category$items, FUN=function(l){
+  id <- l$id
+  category <- l$snippet$title
+  return(c(id,category))
+})
+cate <- data.frame(t(cate))
+colnames(cate) <- c("category_id","video_category")
+cate$category_id <- as.numeric(cate$category_id)
+rownames(cate) <- cate$category_id
+USData$video_category <- cate[USData$category_id,]$video_category
+USData$video_category
+
+USData$country <- "USA"
+USData[1]
+newData9 <- USData[-1]
+newData9[1]
+my_date <- as.Date(newData9$publish_time)
+my_date
+my_time <- substring(newData9$publish_time,12,19)
+my_time
+newData9$date <- as.Date(newData9$publish_time)
+newData9$time <- substring(newData9$publish_time,12,19)
+
+newData9$thumbnail_link <- NULL
+newData9$video_error_or_removed <- NULL
+newData9$ratings_disabled <- NULL
+newData9$comments_disabled <- NULL
+newData9$publish_time <- NULL
+newData9$description <- NULL
+#setwd("C:\\Users\\prate\\Desktop\\youtubeData\\newFinal")
+
+
+finalData <- rbind(newData,newData1,newData2,newData3,newData4,newData5,newData6,newData7,newData8,newData9)
+nrow(finalData)
+write.csv(finalData, file = "MyData.csv")
+finalData$hour <- substring(finalData$time,1,2)
+finalData <- finalData[finalData$hour < 24,]
+#finalData
+finalData1 <- finalData
+finalData1$month <- substring(finalData1$date,6,7)
+finalData1$month
+finalData1 <- finalData1[finalData1$month < 13,]
+finalData1
+
+finalData1$tags <- NULL
+finalData1$category_id <- NULL
+
+length(finalData$hour)
+finalData1$ID <- 1:375942
+#finalData1 <- finalData1[,c(14,1:13)]
+ncol(finalData1)
+direc2 <- "/home/prateek/Desktop/myProject/Datasets/cleaned_datasets"
+setwd(direc2)
+write.csv(finalData1, file = "MyData1.csv", row.names = F)
+
