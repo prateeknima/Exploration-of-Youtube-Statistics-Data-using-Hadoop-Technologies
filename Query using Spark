@@ -1,0 +1,17 @@
+
+from pyspark.sql import SQLContext,Row
+from pyspark import SparkContext
+from pyspark import SparkConf
+sc = SparkContext()
+lines = sc.textFile("hdfs://localhost:54310/youtubedata/part-m-00000")
+parts = lines.map(lambda l: l.split(","))
+sqlContext = SQLContext(sc)
+# construct the Rows by by passing a list of key/value pairs as kwargs
+youtube_data = parts.map(lambda p:Row(ID =p[0],trending_date=p[1],video_title=p[2],channel_title=p[3],views=p[4],likes=p[5],dislikes=p[6],comment_count=p[7],video_category=p[8],country= p[9],date=p[10],time=p[11],hour=p[12],month=p[13]))
+schema1=sqlContext.createDataFrame(youtube_data)
+schema1.registerTempTable("youtube_data")
+#run the query for getting the required result
+result=sqlContext.sql("select channel_title,views,country,month from youtube_data WHERE views > 100000 LIMIT 20")
+result.show()
+result.repartition(1).write.save("myspark",format = "csv",header = "true")
+
