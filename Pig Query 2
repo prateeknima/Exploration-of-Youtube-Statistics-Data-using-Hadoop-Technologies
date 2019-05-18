@@ -1,0 +1,8 @@
+data = LOAD 'hdfs://localhost:54310/youtubedata/part-m-00000' USING PigStorage(',') AS(ID:INT,trending_date:chararray,video_title:chararray,channel_title:chararray,views:INT,likes:INT,dislikes:INT,comment_count:INT,video_category:chararray,country:chararray,video_date:chararray,video_time:chararray,hour:INT,month:INT);
+a = GROUP data BY country;
+b = FOREACH a GENERATE group,COUNT(data.$0) as mycount;
+c = FILTER b BY mycount > 10000;
+d = ORDER c BY mycount DESC;
+e = RANK d;
+Dump e;
+STORE e INTO 'pigQuery2' USING org.apache.pig.backend.hadoop.hbase.HBaseStorage ('Id:RANK,Country:country, Video_Count:avg');
