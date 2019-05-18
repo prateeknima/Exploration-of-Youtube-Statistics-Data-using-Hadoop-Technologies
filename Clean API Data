@@ -1,0 +1,123 @@
+#File to clean the data downloaded using the Youtube API
+#setwd("C:\\Users\\prate\\Desktop\\youtubeData\\api")
+direc <-"/home/prateek/Desktop/myProject/Datasets/youtube_api_data" 
+setwd(direc)
+
+US_data1 <- read.csv("US_1.csv", header=T, na.strings=c(""), stringsAsFactors = FALSE)
+US_data1$Country <- "US"
+US_data1$trending_date <- "17.04.2019"
+US_data2 <- read.csv("US_2.csv", header=T, na.strings=c(""), stringsAsFactors = FALSE)
+US_data2$trending_date <- "18.04.2019"
+US_data <-  rbind(US_data1,US_data2)
+US_data$Country <- "USA"
+#write.csv(US_data, file = "US.csv")
+
+
+
+IN_data1 <- read.csv("IN_1.csv", header=T, na.strings=c(""), stringsAsFactors = FALSE)
+IN_data1$trending_date <- "17.04.2019"
+IN_data2 <- read.csv("IN_2.csv", header=T, na.strings=c(""), stringsAsFactors = FALSE)
+IN_data2$trending_date <- "18.04.2019"
+IN_data <-  rbind(IN_data1,IN_data2)
+IN_data$Country <- "India"
+#write.csv(IN_data, file = "IN.csv")
+
+
+CA_data1 <- read.csv("CA_1.csv", header=T, na.strings=c(""), stringsAsFactors = FALSE)
+CA_data1$trending_date <- "17.04.2019"
+CA_data2 <- read.csv("CA_2.csv", header=T, na.strings=c(""), stringsAsFactors = FALSE)
+CA_data2$trending_date <- "18.04.2019"
+CA_data <-  rbind(CA_data1,CA_data2)
+CA_data$Country <- "Canada"
+#write.csv(CA_data, file = "CA.csv")
+
+DE_data1 <- read.csv("DE_1.csv", header=T, na.strings=c(""), stringsAsFactors = FALSE)
+DE_data1$trending_date <- "17.04.2019"
+DE_data2 <- read.csv("DE_2.csv", header=T, na.strings=c(""), stringsAsFactors = FALSE)
+DE_data2$trending_date <- "18.04.2019"
+DE_data <-  rbind(DE_data1,DE_data2)
+DE_data$Country <- "Germany"
+#write.csv(DE_data, file = "DE.csv")
+
+
+FR_data1 <- read.csv("FR_1.csv", header=T, na.strings=c(""), stringsAsFactors = FALSE)
+FR_data1$trending_date <- "17.04.2019"
+FR_data2 <- read.csv("FR_2.csv", header=T, na.strings=c(""), stringsAsFactors = FALSE)
+FR_data2$trending_date <- "18.04.2019"
+FR_data <-  rbind(FR_data1,FR_data2)
+FR_data <- "France"
+#write.csv(FR_data, file = "FR.csv")
+
+
+GB_data1 <- read.csv("GB_1.csv", header=T, na.strings=c(""), stringsAsFactors = FALSE)
+GB_data1$trending_date <- "17.04.2019"
+GB_data2 <- read.csv("GB_2.csv", header=T, na.strings=c(""), stringsAsFactors = FALSE)
+GB_data2$trending_date <- "18.04.2019"
+GB_data <-  rbind(GB_data1,GB_data2)
+GB_data$Country <- "Great Britain"
+#write.csv(GB_data, file = "GB.csv")
+
+KR_data1 <- read.csv("KR_1.csv", header=T, na.strings=c(""), stringsAsFactors = FALSE)
+KR_data1$trending_date <- "17.04.2019"
+KR_data2 <- read.csv("KR_2.csv", header=T, na.strings=c(""), stringsAsFactors = FALSE)
+KR_data2$trending_date <- "18.04.2019"
+KR_data <-  rbind(KR_data1,KR_data2)
+KR_data$Country <- "South Koria"
+#write.csv(KR_data, file = "KR.csv")
+
+MX_data1 <- read.csv("MX_1.csv", header=T, na.strings=c(""), stringsAsFactors = FALSE)
+MX_data1$trending_date <- "17.04.2019"
+MX_data2 <- read.csv("MX_2.csv", header=T, na.strings=c(""), stringsAsFactors = FALSE)
+MX_data2$trending_date <- "18.04.2019"
+MX_data <-  rbind(MX_data1,MX_data2)
+MX_data$Country <- "Mexico"
+#write.csv(MX_data, file = "MX.csv")
+
+RU_data1 <- read.csv("RU_1.csv", header=T, na.strings=c(""), stringsAsFactors = FALSE)
+RU_data1$trending_date <- "17.04.2019"
+RU_data2 <- read.csv("RU_2.csv", header=T, na.strings=c(""), stringsAsFactors = FALSE)
+RU_data2$trending_date <- "18.04.2019"
+RU_data <-  rbind(RU_data1,RU_data2)
+RU_data$Country <- "Russia"
+#write.csv(RU_data, file = "RU.csv")
+
+
+final_api <- rbind(IN_data,US_data,CA_data,DE_data,FR_data,GB_data,KR_data,MX_data,RU_data)
+final_api$channelId <- NULL
+final_api$channel_title <- "NA"
+final_api$video_category <- "NA"
+#final_api$time <- ""
+#final_api$hour <- ""
+colnames(final_api)[which(names(final_api) == "likeCount")] <- "likes"
+colnames(final_api)[which(names(final_api) == "dislikeCount")] <- "dislikes"
+colnames(final_api)[which(names(final_api) == "commentCount")] <- "comment_count"
+colnames(final_api)[which(names(final_api) == "Country")] <- "country"
+
+
+#colnames(final_api)[](dislikeCount) <- c("dislikes")
+#colnames(final_api)[](commentCount) <- c("comment")
+
+final_api$hour <- substring(final_api$publish_timing,1,2)
+final_api <- final_api[final_api$hour < 24,]
+final_api$month <- substring(final_api$publish_timing,6,7)
+final_api <- final_api[final_api$month < 13,]
+
+final_api$likes[final_api$likes == "[]"] <- 0
+final_api$dislikes[final_api$dislikes == "[]"] <- 0
+final_api$comment_count[final_api$comment_count == "[]"] <- 0
+final_api$date <- as.Date(final_api$publish_timing)
+final_api$date
+final_api$time <- substring(final_api$publish_timing,12,19)
+final_api$Duration <- NULL
+final_api$publish_timing <- NULL
+final_api$ID <- 1:2801
+
+ncol(final_api)
+colnames(final_api)
+final_api <- final_api[,c(14,1:13)]
+final_api <- final_api[,c(1,8,2,9,3:6,10,7,13,14,11,12)] 
+#final_api
+direc2 <-"/home/prateek/Desktop/myProject/Datasets/cleaned_datasets"
+setwd(direc2)
+write.csv(final_api, file = "final_api.csv", row.names = FALSE)
+
